@@ -103,24 +103,54 @@ const palette = {
 
 // ─── SIMPLE TOKENIZER FOR CUSTOM WORDS ────────────────────────
 function simpleTokenize(word) {
-  const morphemes = Object.keys(MORPHEME_TYPES).sort((a, b) => b.length - a.length);
+  const w = word.toLowerCase();
+  if (w.length <= 2) return [w];
+
+  // Common English prefixes, suffixes, and roots (sorted longest-first)
+  const prefixes = ["anti","auto","bi","co","counter","de","dis","down","extra","fore","hyper","il","im","in","inter","ir","mal","micro","mid","mis","mono","multi","non","out","over","poly","post","pre","pro","pseudo","re","semi","sub","super","trans","tri","ultra","un","under","up"];
+  const suffixes = ["ization","ments","ness","ment","tion","sion","ious","eous","ible","able","less","ness","ling","ally","ical","ence","ance","ular","ular","ous","ful","ive","ing","ish","ist","ism","ity","ize","ise","ory","ary","ery","dom","age","ate","ify","ent","ant","ure","ial","ous","ive","ess","eer","ard","let","kin","ed","en","er","ly","al","ty","th"];
+
+  prefixes.sort((a, b) => b.length - a.length);
+  suffixes.sort((a, b) => b.length - a.length);
+
   const result = [];
-  let remaining = word.toLowerCase();
-  while (remaining.length > 0) {
-    let matched = false;
-    for (const m of morphemes) {
-      if (remaining.startsWith(m)) {
-        result.push(m);
-        remaining = remaining.slice(m.length);
-        matched = true;
+  let remaining = w;
+
+  // Extract prefixes
+  let foundPrefix = true;
+  while (foundPrefix && remaining.length > 2) {
+    foundPrefix = false;
+    for (const p of prefixes) {
+      if (remaining.startsWith(p) && remaining.length > p.length + 1) {
+        result.push(p);
+        remaining = remaining.slice(p.length);
+        foundPrefix = true;
         break;
       }
     }
-    if (!matched) {
-      result.push(remaining[0]);
-      remaining = remaining.slice(1);
+  }
+
+  // Extract suffixes from the end
+  const suffixParts = [];
+  let foundSuffix = true;
+  while (foundSuffix && remaining.length > 2) {
+    foundSuffix = false;
+    for (const s of suffixes) {
+      if (remaining.endsWith(s) && remaining.length > s.length + 1) {
+        suffixParts.unshift(s);
+        remaining = remaining.slice(0, -s.length);
+        foundSuffix = true;
+        break;
+      }
     }
   }
+
+  // Whatever is left is the root/stem
+  if (remaining.length > 0) {
+    result.push(remaining);
+  }
+  result.push(...suffixParts);
+
   return result;
 }
 
@@ -286,7 +316,7 @@ function ConnectionLine({ start, end, color, dashed, opacity }) {
 // AutoRotate is handled via OrbitControls autoRotate prop
 
 // ─── CAMERA ZOOM CONTROLLER ────────────────────────────────
-const DEFAULT_CAM_POS = [4, 3, 6];
+const DEFAULT_CAM_POS = [5, 4, 8];
 
 const CameraZoomController = forwardRef(function CameraZoomController(_, ref) {
   const { camera } = useThree();
@@ -1071,31 +1101,29 @@ function RAGViz() {
       </div>
 
       {/* Pipeline progress bar with labels */}
-      <div style={{ marginBottom: "20px" }}>
-        {/* Line + circles row */}
-        <div style={{ position: "relative", height: "32px", margin: "0 16px" }}>
-          {/* Background connector line — centered vertically through circles */}
-          <div style={{
-            position: "absolute", top: "15px", left: "16px", right: "16px",
-            height: "2px", background: palette.border,
-          }} />
-          {/* Active portion of the line */}
-          <div style={{
-            position: "absolute", top: "15px", left: "16px",
-            height: "2px",
-            width: step > 0 ? `${(step / 4) * 100}%` : "0%",
-            maxWidth: "calc(100% - 32px)",
-            background: palette.accent,
-            transition: "width 0.3s ease",
-          }} />
-          {/* Circle buttons — evenly spaced */}
-          <div style={{
-            position: "relative", display: "flex",
-            justifyContent: "space-between", height: "32px",
-          }}>
-            {stepLabels.map((label, i) => (
+      <div style={{ marginBottom: "20px", padding: "0 8px" }}>
+        {/* Each step is a flex column: circle on top, label below. Lines connect circles. */}
+        <div style={{
+          display: "flex", alignItems: "flex-start",
+          position: "relative",
+        }}>
+          {stepLabels.map((label, i) => (
+            <div key={i} style={{
+              flex: 1, display: "flex", flexDirection: "column", alignItems: "center",
+              position: "relative",
+            }}>
+              {/* Connector line to the next circle */}
+              {i < 4 && (
+                <div style={{
+                  position: "absolute", top: "15px",
+                  left: "calc(50% + 16px)", right: "calc(-50% + 16px)",
+                  height: "2px",
+                  background: step > i ? palette.accent : palette.border,
+                  transition: "background 0.3s ease",
+                  zIndex: 1,
+                }} />
+              )}
               <button
-                key={i}
                 onClick={() => setStep(i)}
                 style={{
                   width: "32px", height: "32px", borderRadius: "50%",
@@ -1111,23 +1139,15 @@ function RAGViz() {
                   flexShrink: 0,
                 }}
               >{i + 1}</button>
-            ))}
-          </div>
-        </div>
-        {/* Labels row — matching spacing */}
-        <div style={{
-          display: "flex", justifyContent: "space-between",
-          margin: "6px 16px 0",
-        }}>
-          {stepLabels.map((label, i) => (
-            <div key={i} style={{
-              width: "32px", textAlign: "center",
-              fontSize: "10px",
-              color: step === i ? palette.accent : palette.textDim,
-              fontFamily: "'JetBrains Mono', monospace",
-              fontWeight: step === i ? 600 : 400,
-              transition: "color 0.3s ease",
-            }}>{label}</div>
+              <div style={{
+                fontSize: "10px", marginTop: "6px",
+                color: step === i ? palette.accent : palette.textDim,
+                fontFamily: "'JetBrains Mono', monospace",
+                fontWeight: step === i ? 600 : 400,
+                transition: "color 0.3s ease",
+                textAlign: "center",
+              }}>{label}</div>
+            </div>
           ))}
         </div>
       </div>
@@ -1547,20 +1567,15 @@ export default function TokenExplorer() {
     }
   }, [selectedCluster]);
 
-  // Handle custom word submission
-  const handleCustomWordSubmit = useCallback((e) => {
-    e.preventDefault();
-    const word = customWord.trim().toLowerCase();
-    if (word.length > 0) {
-      setTokenizerInput(word);
-    }
-  }, [customWord]);
+
 
   return (
     <div style={{
-      width: "100vw", height: "100vh", background: palette.bg,
+      width: "100vw", height: "100dvh", background: palette.bg,
       color: palette.text, fontFamily: "'DM Sans', -apple-system, sans-serif",
       display: "flex", flexDirection: "column", overflow: "hidden",
+      paddingTop: "env(safe-area-inset-top)",
+      paddingBottom: "env(safe-area-inset-bottom)",
     }}>
       <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
       <style dangerouslySetInnerHTML={{ __html: `
@@ -1611,7 +1626,7 @@ export default function TokenExplorer() {
           <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
             <div style={{ flex: 1, minHeight: "280px", position: "relative" }}>
               <Canvas
-                camera={{ position: [4, 3, 6], fov: 55 }}
+                camera={{ position: [5, 4, 8], fov: 50 }}
                 style={{ background: palette.bg }}
                 gl={{ antialias: true, alpha: true }}
               >
@@ -1664,7 +1679,7 @@ export default function TokenExplorer() {
 
               {/* Zoom controls + back button */}
               <div style={{
-                position: "absolute", top: "8px", right: "8px",
+                position: "absolute", top: "8px", right: "12px",
                 display: "flex", flexDirection: "column", gap: "4px",
                 zIndex: 10,
               }}>
@@ -1820,25 +1835,30 @@ export default function TokenExplorer() {
               Models break words into morphemes: the smallest meaningful fragments in their ~100k-token vocabulary.
             </div>
 
-            {/* 2a: Custom word input */}
-            <form onSubmit={handleCustomWordSubmit} style={{ marginBottom: "12px" }}>
+            {/* Custom word input — live tokenization as you type */}
+            <div style={{ marginBottom: "12px" }}>
               <input
                 type="text"
                 value={customWord}
-                onChange={e => setCustomWord(e.target.value)}
+                onChange={e => {
+                  const val = e.target.value;
+                  setCustomWord(val);
+                  if (val.trim().length > 0) {
+                    setTokenizerInput(val.trim().toLowerCase());
+                  }
+                }}
                 placeholder="Type any word to tokenize..."
                 style={{
                   width: "100%", padding: "10px 14px", borderRadius: "8px",
-                  border: `1px solid ${palette.border}`, background: palette.surface,
+                  border: `1px solid ${customWord ? palette.accent : palette.border}`,
+                  background: palette.surface,
                   color: palette.text, fontSize: "16px",
                   fontFamily: "'JetBrains Mono', monospace",
                   outline: "none", boxSizing: "border-box",
                   transition: "border-color 0.2s",
                 }}
-                onFocus={e => e.target.style.borderColor = palette.accent}
-                onBlur={e => e.target.style.borderColor = palette.border}
               />
-            </form>
+            </div>
 
             <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "20px" }}>
               {Object.keys(TOKENIZE_EXAMPLES).map(word => (

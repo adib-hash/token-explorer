@@ -1574,8 +1574,7 @@ export default function TokenExplorer() {
       width: "100vw", height: "100dvh", background: palette.bg,
       color: palette.text, fontFamily: "'DM Sans', -apple-system, sans-serif",
       display: "flex", flexDirection: "column", overflow: "hidden",
-      paddingTop: "env(safe-area-inset-top)",
-      paddingBottom: "env(safe-area-inset-bottom)",
+
     }}>
       <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
       <style dangerouslySetInnerHTML={{ __html: `
@@ -1681,23 +1680,24 @@ export default function TokenExplorer() {
               <div style={{
                 position: "absolute", top: "8px", right: "12px",
                 display: "flex", flexDirection: "column", gap: "4px",
+                alignItems: "flex-end",
                 zIndex: 10,
               }}>
                 {selectedCluster && (
                   <button
                     onClick={() => setSelectedToken(null)}
                     style={{
-                      height: "36px", borderRadius: "8px",
+                      width: "36px", height: "36px", borderRadius: "8px",
                       border: `1px solid ${palette.border}`,
                       background: palette.surface + "ee",
-                      color: palette.textDim, fontSize: "10px",
-                      fontFamily: "'JetBrains Mono', monospace",
-                      cursor: "pointer", display: "flex", padding: "0 10px",
-                      alignItems: "center", justifyContent: "center", gap: "4px",
+                      color: palette.textDim, fontSize: "12px",
+                      cursor: "pointer", display: "flex",
+                      alignItems: "center", justifyContent: "center",
                       WebkitTapHighlightColor: "transparent",
                       transition: "all 0.2s ease",
                     }}
-                  >← all</button>
+                    title="Back to all clusters"
+                  >←</button>
                 )}
                 <button
                   onClick={() => cameraRef.current?.zoomIn()}

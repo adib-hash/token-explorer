@@ -2,21 +2,15 @@
 
 All notable changes to Token Explorer are documented here.
 
-## v1.2.0 — 2026-04-22
+## v1.3.0 — 2026-04-22
 
-Token becomes a teaching app, not just a demo reel.
+Chapter 3 begins: **Predict** — the first unit on how LLMs actually generate text.
 
 ### Added
-- **Landing page** (`src/landing/Landing.jsx`) — new default view with three chapter cards, per-unit progress checkmarks, and "Continue where you left off" CTA when a previous unit is saved.
-- **Chapters** — units are now grouped: Chapter 1 *Foundations* (Token Space, Tokenizer), Chapter 2 *Memory* (Context Window, RAG), Chapter 3 *Intelligence* (Predict / Reason / Agents coming in upcoming releases).
-- **IntroPanel** (`src/shared/ui/IntroPanel.jsx`) — every unit now opens with a collapsible "Why this matters" block: concept chips, a one-paragraph motivation, and curated further-reading links. Collapsed state is remembered per unit.
-- **UnitNav** (`src/shared/ui/UnitNav.jsx`) — previous / home / next navigation at the bottom of every unit, derived from the curriculum ordering.
-- **Curriculum source of truth** (`src/shared/data/curriculum.js`) — one place to define chapters, units, icons, intro copy, concepts, further reading.
-- **Progress persistence** — `completedUnits` and `lastUnitId` are stored in localStorage under the `token:v1:` prefix.
-
-### Changed
-- Tab strip now uses **Lucide icons** (Orbit, Scissors, PanelTop, Search) instead of emojis, with a Home icon to jump back to the landing page.
-- RAG chunk icons replaced with themed Lucide icons (Citrus, Cherry, Salad, Sun, Pill, Milk, Leaf) on tinted circular backgrounds — no more emoji in the UI.
-- Context Window's overflow warning uses a Lucide `AlertTriangle` instead of the `⚠` emoji.
-- `index.html` title updated to "Token — a visual guide to LLMs"; body no longer locks `overflow: hidden` so the landing page can scroll on mobile.
-- App shell now renders the landing by default. The "Token" logo click returns to the landing; click again from the landing to reset all local state.
+- **Predict unit** (`src/units/predict/`) with three views:
+  - *Attention* — hover a token in a 5-token prefix to see which earlier tokens it attends to, rendered both as a spotlight row and as a full causal attention matrix heatmap.
+  - *Next token* — hand-picked logit distribution per scenario, softmax'd through a live temperature slider (0–2). Click a bar to commit a token and see how auto-regression works. Watch the distribution sharpen at temperature 0 and flatten at temperature 2.
+  - *Training vs. inference* — the same scenario shown as an inference pick and as a training step, with the correct token highlighted and arrows showing which probabilities get pushed up vs. down by the loss.
+- Three scenarios: a **factual** completion (`The capital of France is ___`), a **code** completion (`function add(a, b) {`), and an **ambiguous** prose completion (`After the storm the town ___`). Every viz labels itself as illustrative — numbers are hand-picked, not a live model.
+- `softmax(logits, temperature)` and seedable `mulberry32` / `hashString` helpers added to `src/shared/util.js` for this unit and future ones.
+- Predict is wired into the curriculum (Chapter 3 — Intelligence), the tab strip (BarChart3 icon), and prev/next nav.

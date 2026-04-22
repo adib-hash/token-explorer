@@ -1,11 +1,12 @@
 import { useState, useCallback, useEffect } from "react";
 
-import { Orbit, Scissors, PanelTop, Search, Home as HomeIcon, Circle } from "lucide-react";
+import { Orbit, Scissors, PanelTop, Search, Home as HomeIcon, Circle, BarChart3 } from "lucide-react";
 import { palette, fonts, keyframesCss, googleFontsHref } from "./theme.js";
 import TokenSpace from "./units/tokenSpace/TokenSpace.jsx";
 import Tokenizer from "./units/tokenizer/Tokenizer.jsx";
 import ContextWindow from "./units/contextWindow/ContextWindow.jsx";
 import Rag from "./units/rag/Rag.jsx";
+import Predict from "./units/predict/Predict.jsx";
 import Landing from "./landing/Landing.jsx";
 import { UNIT_ORDER, findUnit } from "./shared/data/curriculum.js";
 import { useLocalStorageState } from "./shared/hooks/useLocalStorageState.js";
@@ -15,6 +16,7 @@ const UNIT_COMPONENTS = {
   "tokenizer": Tokenizer,
   "context-window": ContextWindow,
   "rag": Rag,
+  "predict": Predict,
 };
 
 const TAB_ICONS = {
@@ -22,6 +24,7 @@ const TAB_ICONS = {
   "tokenizer": Scissors,
   "context-window": PanelTop,
   "rag": Search,
+  "predict": BarChart3,
 };
 
 export default function App() {

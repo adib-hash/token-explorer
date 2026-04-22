@@ -69,7 +69,19 @@ export const CHAPTERS = [
     subtitle: "Capability",
     description: "How LLMs actually work, how they learned to reason, and how they became agents.",
     units: [
-      // Phase 3: Predict
+      {
+        id: "predict",
+        title: "Predict",
+        iconName: "BarChart3",
+        tagline: "How the model actually chooses the next word.",
+        whyItMatters:
+          "An LLM is a next-token predictor. Given any prefix of text, it produces a probability for every possible next token, and picks one. Doing that over and over is how it writes. Attention decides which earlier tokens matter; temperature decides how daring the pick is.",
+        concepts: ["attention", "logits", "softmax", "temperature", "auto-regression", "training vs. inference"],
+        furtherReading: [
+          { label: "The Illustrated Transformer — Jay Alammar", href: "https://jalammar.github.io/illustrated-transformer/" },
+          { label: "Let\'s build GPT — Karpathy (YouTube)", href: "https://www.youtube.com/watch?v=kCc8FmEb1nY" },
+        ],
+      },
       // Phase 4: Reason
       // Phase 5: Agents
     ],

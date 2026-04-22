@@ -2,6 +2,18 @@
 
 All notable changes to Token Explorer are documented here.
 
+## v1.4.0 — 2026-04-22
+
+Token Space tab reworked into a desktop workbench layout to eliminate the scroll-vs-zoom conflict and keep the zoom controls always in reach.
+
+### Changed
+- **Token Space — desktop layout.** The tab now fills the viewport with no page scroll: a collapsible intro banner on top, the 3D canvas expanding to fill the remaining space (`flex: 1` with `min-height: 0`), and a compact bottom strip with selected-token details + prev/next nav. Scrolling on the canvas only zooms the camera; there is no longer a page scroll to conflict with, and the zoom/reset buttons stay pinned in the canvas's top-right.
+- **Token Space — mobile layout.** Preserved as the existing vertical stack. Touch doesn't conflict with pinch-to-zoom, so nothing needed to change.
+- **Selected-token details on desktop** render as a single horizontal row with horizontally-scrollable nearest-neighbor pills, instead of a tall card that pushed the canvas down.
+
+### Added
+- `useMediaQuery` hook at `src/shared/hooks/useMediaQuery.js` so other units can branch on viewport size the same way.
+
 ## v1.3.1 — 2026-04-22
 
 ### Fixed

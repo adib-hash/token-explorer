@@ -3,8 +3,13 @@ import { Canvas } from "@react-three/fiber";
 import { palette } from "../../theme.js";
 import { VOCAB, CLUSTER_COLORS, CLUSTER_LABELS, getFirstTokenInCluster } from "./data.js";
 import TokenSpaceScene from "./Scene.jsx";
+import IntroPanel from "../../shared/ui/IntroPanel.jsx";
+import UnitNav from "../../shared/ui/UnitNav.jsx";
+import { findUnit } from "../../shared/data/curriculum.js";
 
-export default function TokenSpace() {
+const UNIT = findUnit("token-space");
+
+export default function TokenSpace({ onNavigate, onHome }) {
   const [selectedToken, setSelectedToken] = useState(null);
   const cameraRef = useRef();
 
@@ -39,8 +44,12 @@ export default function TokenSpace() {
   }, [selectedCluster]);
 
   return (
-    <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
-      <div style={{ flex: 1, minHeight: "280px", position: "relative" }}>
+    <div style={{ display: "flex", flexDirection: "column", minHeight: "100%" }}>
+      <div style={{ padding: "16px 16px 0", maxWidth: "720px", width: "100%", margin: "0 auto", boxSizing: "border-box" }}>
+        <IntroPanel {...UNIT} unitId={UNIT.id} />
+      </div>
+
+      <div style={{ flex: 1, minHeight: "60vh", position: "relative" }}>
         <Canvas
           camera={{ position: [5, 4, 8], fov: 50 }}
           style={{ background: palette.bg }}
@@ -239,6 +248,12 @@ export default function TokenSpace() {
           <div style={{ fontSize: "12px", color: palette.textDim, lineHeight: 1.5 }}>
             Click any sphere or token to explore its nearest neighbors in the embedding space.
           </div>
+        </div>
+      )}
+
+      {onNavigate && (
+        <div style={{ padding: "0 16px 16px", maxWidth: "720px", width: "100%", margin: "0 auto", boxSizing: "border-box" }}>
+          <UnitNav unitId={UNIT.id} onNavigate={onNavigate} onHome={onHome} />
         </div>
       )}
     </div>

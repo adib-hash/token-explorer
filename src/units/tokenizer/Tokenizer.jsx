@@ -1,7 +1,12 @@
 import { useState, useMemo } from "react";
 import { palette } from "../../theme.js";
 import { simpleTokenize } from "../../shared/util.js";
+import IntroPanel from "../../shared/ui/IntroPanel.jsx";
+import UnitNav from "../../shared/ui/UnitNav.jsx";
+import { findUnit } from "../../shared/data/curriculum.js";
 import { TOKENIZE_EXAMPLES, MORPHEME_MEANINGS, MORPHEME_TYPES, MORPHEME_TYPE_COLORS } from "./data.js";
+
+const UNIT = findUnit("tokenizer");
 
 function TokenizerViz({ word, tokens }) {
   const [activeIdx, setActiveIdx] = useState(null);
@@ -173,7 +178,7 @@ function TokenizerViz({ word, tokens }) {
   );
 }
 
-export default function Tokenizer() {
+export default function Tokenizer({ onNavigate, onHome }) {
   const [tokenizerInput, setTokenizerInput] = useState("unhappily");
   const [customWord, setCustomWord] = useState("");
 
@@ -183,7 +188,9 @@ export default function Tokenizer() {
   }, [tokenizerInput]);
 
   return (
-    <div style={{ padding: "16px" }}>
+    <div style={{ padding: "16px", maxWidth: "720px", margin: "0 auto" }}>
+      <IntroPanel {...UNIT} unitId={UNIT.id} />
+
       <div style={{ fontSize: "13px", color: palette.textDim, marginBottom: "16px", lineHeight: 1.6 }}>
         Models break words into morphemes: the smallest meaningful fragments in their ~100k-token vocabulary.
       </div>
@@ -234,6 +241,8 @@ export default function Tokenizer() {
           This is why AI can understand a word it's never seen before, like "Sprockethouse" → [sprocket] + [house]. But it also explains why AI struggles with character-level tasks like counting letters.
         </div>
       </div>
+
+      {onNavigate && <UnitNav unitId={UNIT.id} onNavigate={onNavigate} onHome={onHome} />}
     </div>
   );
 }

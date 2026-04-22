@@ -1,6 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
+import { AlertTriangle } from "lucide-react";
 import { palette } from "../../theme.js";
 import { WHITEBOARD_SCENARIOS } from "./data.js";
+import IntroPanel from "../../shared/ui/IntroPanel.jsx";
+import UnitNav from "../../shared/ui/UnitNav.jsx";
+import { findUnit } from "../../shared/data/curriculum.js";
+
+const UNIT = findUnit("context-window");
 
 function ContextWindowViz() {
   const [activeScenario, setActiveScenario] = useState("chat");
@@ -191,8 +197,11 @@ function ContextWindowViz() {
               textAlign: "center",
             }}>
               <div style={{
-                fontSize: "20px", marginBottom: "8px",
-              }}>⚠</div>
+                display: "flex", justifyContent: "center", marginBottom: "8px",
+                color: palette.danger,
+              }}>
+                <AlertTriangle size={22} />
+              </div>
               <div style={{
                 fontSize: "13px", fontWeight: 700, color: palette.danger,
                 fontFamily: "'JetBrains Mono', monospace",
@@ -283,9 +292,11 @@ function ContextWindowViz() {
   );
 }
 
-export default function ContextWindow() {
+export default function ContextWindow({ onNavigate, onHome }) {
   return (
-    <div style={{ padding: "16px" }}>
+    <div style={{ padding: "16px", maxWidth: "720px", margin: "0 auto" }}>
+      <IntroPanel {...UNIT} unitId={UNIT.id} />
+
       <div style={{ fontSize: "13px", color: palette.textDim, marginBottom: "6px", lineHeight: 1.6 }}>
         Think of an LLM's memory as a whiteboard. Everything — the system instructions, your prompt, and the AI's response — must fit on that whiteboard at once. This is the <strong style={{ color: palette.text }}>context window</strong>.
       </div>
@@ -330,6 +341,8 @@ export default function ContextWindow() {
           </div>
         </div>
       </div>
+
+      {onNavigate && <UnitNav unitId={UNIT.id} onNavigate={onNavigate} onHome={onHome} />}
     </div>
   );
 }

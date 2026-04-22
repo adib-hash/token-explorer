@@ -1,0 +1,94 @@
+export const CHAPTERS = [
+  {
+    id: "foundations",
+    title: "Foundations",
+    subtitle: "Representation",
+    description: "How LLMs turn language into numbers and numbers back into language.",
+    units: [
+      {
+        id: "token-space",
+        title: "Token Space",
+        iconName: "Orbit",
+        tagline: "Words as points in space.",
+        whyItMatters:
+          "Every word an LLM knows lives as a point in a high-dimensional space. Similar meanings cluster together. This geometry is how the model 'understands' relationships between concepts.",
+        concepts: ["embeddings", "vectors", "similarity", "semantic space"],
+        furtherReading: [
+          { label: "Illustrated Word2Vec — Jay Alammar", href: "https://jalammar.github.io/illustrated-word2vec/" },
+        ],
+      },
+      {
+        id: "tokenizer",
+        title: "Tokenizer",
+        iconName: "Scissors",
+        tagline: "Breaking words into pieces.",
+        whyItMatters:
+          "Models don't see words — they see tokens, the ~100k fragments that make up their vocabulary. Understanding tokenization explains why 'strawberry' has 3 Rs but an LLM sometimes miscounts them.",
+        concepts: ["subwords", "morphemes", "BPE", "vocabulary"],
+        furtherReading: [
+          { label: "OpenAI tokenizer playground", href: "https://platform.openai.com/tokenizer" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "memory",
+    title: "Memory",
+    subtitle: "State",
+    description: "How LLMs handle conversation, documents, and the information they weren't trained on.",
+    units: [
+      {
+        id: "context-window",
+        title: "Context Window",
+        iconName: "PanelTop",
+        tagline: "The whiteboard the model can see.",
+        whyItMatters:
+          "An LLM has no memory between messages. Everything it knows about your conversation sits on a fixed-size whiteboard. When the whiteboard fills up, older content falls off — that's why long chats forget.",
+        concepts: ["token budget", "system prompt", "overflow", "no persistent memory"],
+        furtherReading: [
+          { label: "Anthropic — Claude context windows", href: "https://docs.claude.com/en/docs/build-with-claude/context-windows" },
+        ],
+      },
+      {
+        id: "rag",
+        title: "RAG Pipeline",
+        iconName: "Search",
+        tagline: "Grounding answers in real documents.",
+        whyItMatters:
+          "Retrieval-Augmented Generation lets an LLM answer from documents it was never trained on. Instead of trusting the model's memory (which hallucinates), the system looks up relevant text first, then asks the model to answer using only that.",
+        concepts: ["embeddings", "vector search", "retrieval", "grounding", "citations"],
+        furtherReading: [
+          { label: "Pinecone — what is RAG", href: "https://www.pinecone.io/learn/retrieval-augmented-generation/" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "intelligence",
+    title: "Intelligence",
+    subtitle: "Capability",
+    description: "How LLMs actually work, how they learned to reason, and how they became agents.",
+    units: [
+      // Phase 3: Predict
+      // Phase 4: Reason
+      // Phase 5: Agents
+    ],
+  },
+];
+
+export const UNIT_ORDER = CHAPTERS.flatMap(ch =>
+  ch.units.map(u => ({ ...u, chapterId: ch.id, chapterTitle: ch.title }))
+);
+
+export function findUnit(unitId) {
+  return UNIT_ORDER.find(u => u.id === unitId);
+}
+
+export function neighborUnits(unitId) {
+  const idx = UNIT_ORDER.findIndex(u => u.id === unitId);
+  if (idx === -1) return { prev: null, next: null };
+  return {
+    prev: idx > 0 ? UNIT_ORDER[idx - 1] : null,
+    next: idx < UNIT_ORDER.length - 1 ? UNIT_ORDER[idx + 1] : null,
+  };
+}

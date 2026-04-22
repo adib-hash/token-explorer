@@ -1,7 +1,30 @@
 import { useState, useMemo, useEffect } from "react";
+import { Citrus, Cherry, Salad, Sun, Pill, Milk, Leaf, Circle } from "lucide-react";
 import { palette } from "../../theme.js";
 import { computeSimilarity } from "../../shared/util.js";
 import { RAG_CHUNKS } from "./data.js";
+import IntroPanel from "../../shared/ui/IntroPanel.jsx";
+import UnitNav from "../../shared/ui/UnitNav.jsx";
+import { findUnit } from "../../shared/data/curriculum.js";
+
+const UNIT = findUnit("rag");
+
+function ChunkIcon({ iconName, tint, size = 16 }) {
+  const ICON_MAP = { Citrus, Cherry, Salad, Sun, Pill, Milk, Leaf };
+  const Icon = ICON_MAP[iconName] || Circle;
+  return (
+    <div style={{
+      width: size + 10, height: size + 10,
+      borderRadius: "50%",
+      background: tint + "20",
+      border: `1px solid ${tint}40`,
+      display: "flex", alignItems: "center", justifyContent: "center",
+      flexShrink: 0,
+    }}>
+      <Icon size={size} color={tint} />
+    </div>
+  );
+}
 
 function RAGViz() {
   const [step, setStep] = useState(0);
@@ -220,7 +243,7 @@ function RAGViz() {
                   opacity: revealed ? 1 : 0.3,
                   transition: "all 0.4s ease",
                 }}>
-                  <span style={{ fontSize: "16px", flexShrink: 0 }}>{chunk.icon}</span>
+                  <ChunkIcon iconName={chunk.iconName} tint={chunk.tint} size={14} />
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{
                       fontSize: "10px", color: palette.text, lineHeight: 1.4,
@@ -297,7 +320,9 @@ function RAGViz() {
                       fontFamily: "'JetBrains Mono', monospace",
                     }}>#{i + 1} · {(chunk.score * 100).toFixed(0)}%</div>
                   )}
-                  <div style={{ fontSize: "14px", marginBottom: "4px" }}>{chunk.icon}</div>
+                  <div style={{ marginBottom: "4px" }}>
+                    <ChunkIcon iconName={chunk.iconName} tint={chunk.tint} size={12} />
+                  </div>
                   <div style={{
                     fontSize: "10px", color: isRetrieved ? palette.text : palette.textDim,
                     lineHeight: 1.4,
@@ -330,7 +355,7 @@ function RAGViz() {
             }}>context window</div>
             <div style={{ fontSize: "10px", color: palette.textDim, fontFamily: "'JetBrains Mono', monospace", lineHeight: 1.6 }}>
               <span style={{ color: palette.warning }}>System:</span> Answer using only the provided context.<br/>
-              <span style={{ color: palette.success }}>Context:</span> {chunks.filter(c => c.relevant).map(c => `[${c.icon} ${c.text.slice(0, 30)}...]`).join(" ")}<br/>
+              <span style={{ color: palette.success }}>Context:</span> {chunks.filter(c => c.relevant).map(c => `[${c.text.slice(0, 32)}...]`).join(" ")}<br/>
               <span style={{ color: palette.accent }}>User:</span> {query}
             </div>
           </div>
@@ -410,10 +435,11 @@ function RAGViz() {
                   background: palette.success + "20",
                   padding: "1px 5px", borderRadius: "3px", flexShrink: 0,
                 }}>{i + 1}</span>
-                <span style={{ fontSize: "10px", marginRight: "4px" }}>{chunk.icon}</span>
+                <ChunkIcon iconName={chunk.iconName} tint={chunk.tint} size={11} />
                 <span style={{
                   fontSize: "10px", color: palette.textDim,
                   overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                  flex: 1, minWidth: 0,
                 }}>{chunk.text}</span>
                 <span style={{
                   fontSize: "10px", color: palette.success, flexShrink: 0,
@@ -441,9 +467,11 @@ function RAGViz() {
   );
 }
 
-export default function Rag() {
+export default function Rag({ onNavigate, onHome }) {
   return (
-    <div style={{ padding: "16px" }}>
+    <div style={{ padding: "16px", maxWidth: "720px", margin: "0 auto" }}>
+      <IntroPanel {...UNIT} unitId={UNIT.id} />
+
       <div style={{ fontSize: "13px", color: palette.textDim, marginBottom: "6px", lineHeight: 1.6 }}>
         <strong style={{ color: palette.text }}>Retrieval-Augmented Generation</strong> — how LLMs answer questions from documents they weren't trained on.
       </div>
@@ -451,6 +479,8 @@ export default function Rag() {
         Step through each stage to see how a question becomes a grounded, source-cited answer.
       </div>
       <RAGViz />
+
+      {onNavigate && <UnitNav unitId={UNIT.id} onNavigate={onNavigate} onHome={onHome} />}
     </div>
   );
 }

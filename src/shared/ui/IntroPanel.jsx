@@ -109,7 +109,7 @@ function IntroModal({ title, tagline, whyItMatters, concepts, furtherReading, on
         background: "rgba(5, 8, 16, 0.72)",
         backdropFilter: "blur(4px)",
         WebkitBackdropFilter: "blur(4px)",
-        zIndex: 1000,
+        zIndex: 2147483000,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",

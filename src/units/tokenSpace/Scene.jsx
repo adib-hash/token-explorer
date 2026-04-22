@@ -52,7 +52,7 @@ function ClusterSphere({ position, color, label, onClick, isHidden }) {
         transparent
         opacity={0.9}
       />
-      <Html center distanceFactor={8} style={{ pointerEvents: "none" }}>
+      <Html center distanceFactor={8} zIndexRange={[30, 0]} style={{ pointerEvents: "none" }}>
         <div style={{
           fontSize: "10px", fontWeight: 700, color: "rgba(255,255,255,0.9)",
           fontFamily: "'JetBrains Mono', monospace",
@@ -75,7 +75,7 @@ function ClusterSphere({ position, color, label, onClick, isHidden }) {
 
 function TokenLabel({ name, data, isSelected, isNearby, dimmed, position, onClick }) {
   return (
-    <Html position={position} center distanceFactor={8} style={{ pointerEvents: "auto" }}>
+    <Html position={position} center distanceFactor={8} zIndexRange={[30, 0]} style={{ pointerEvents: "auto" }}>
       <div
         onClick={(e) => { e.stopPropagation(); onClick(); }}
         style={{

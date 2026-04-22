@@ -2,6 +2,11 @@
 
 All notable changes to Token Explorer are documented here.
 
+## v1.4.2 — 2026-04-22
+
+### Fixed
+- **3D token labels were rendering over the "Learn more" modal.** drei's `<Html>` component (used for the cluster name + token word pills in Token Space) defaults to a `zIndexRange` ceiling of ~16.7M, which sat above the modal backdrop's `z-index: 1000`. Raised the IntroModal backdrop to `2147483000` and capped drei's `zIndexRange` on both `<Html>` usages in `Scene.jsx` to `[30, 0]` so future overlays stack predictably.
+
 ## v1.4.1 — 2026-04-22
 
 Intro panels no longer eat canvas space when expanded.

@@ -2,6 +2,20 @@
 
 All notable changes to Token Explorer are documented here.
 
+## v1.5.0 — 2026-04-22
+
+Chapter 3 continues: **Reason** — the second Intelligence unit, on how chain-of-thought transforms multi-step problem solving.
+
+### Added
+- **Reason unit** (`src/units/reason/`) with three sub-views:
+  - *Direct vs Thinking* — Same problem solved two ways side by side. Direct path blurts a wrong answer in a handful of tokens; thinking path reveals the reasoning steps one at a time and lands on the correct answer. Replay button re-triggers the staggered reveal.
+  - *Thinking budget* — A 4-stop slider (0 / 15 / 30 / 60 tokens). As the budget grows the reasoning trace extends and the answer flips from ✗ to ✓ at the correctness threshold. Live token-cost readout makes the test-time-compute story concrete.
+  - *Self-check* — A two-stage flow. Stage 1 shows the initial (often wrong) answer. A *Run self-check* button surfaces a critique of that answer and a revised solution. Button-gated on purpose so learners confront the mistake before the fix.
+- Three scenarios: a **math word problem** (`$40 after a 20% discount → original?`), a **logic puzzle** (`Alice > Bob > Carol, find Bob's age range`), and a **multi-hop factual** (`2016 Olympics → Rio → Brazil → Portuguese`). Each is picked so a direct one-shot answer is believably wrong and a chain-of-thought fix is satisfying.
+- Every viz labels itself as **illustrative — hand-picked steps, not live model output**, matching Predict's tone.
+- Reason is wired into the curriculum (Chapter 3 — Intelligence, after Predict), the tab strip (Brain icon), and prev/next nav. Predict now links forward to Reason; Reason is the last unit until Phase 5 (Agents) lands.
+- `SPEC-reason.md` added to the repo as the source-of-truth design doc for this module.
+
 ## v1.4.2 — 2026-04-22
 
 ### Fixed

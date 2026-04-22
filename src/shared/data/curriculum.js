@@ -82,7 +82,20 @@ export const CHAPTERS = [
           { label: "Let\'s build GPT — Karpathy (YouTube)", href: "https://www.youtube.com/watch?v=kCc8FmEb1nY" },
         ],
       },
-      // Phase 4: Reason
+      {
+        id: "reason",
+        title: "Reason",
+        iconName: "Brain",
+        tagline: "Thinking out loud, one step at a time.",
+        whyItMatters:
+          "Ask an LLM a hard multi-step question and it often blurts a wrong answer on instinct. Make it 'think out loud' first — write down intermediate steps — and the same model gets it right. That's chain of thought. Modern 'reasoning' models like o1 and Claude's extended thinking mode do this automatically, which is why they cost more tokens but answer harder questions.",
+        concepts: ["chain of thought", "test-time compute", "scratchpad", "self-verification"],
+        furtherReading: [
+          { label: "Chain-of-Thought Prompting — Wei et al.", href: "https://arxiv.org/abs/2201.11903" },
+          { label: "OpenAI — Learning to reason with LLMs (o1)", href: "https://openai.com/index/learning-to-reason-with-llms/" },
+          { label: "Anthropic — Claude's extended thinking", href: "https://docs.claude.com/en/docs/build-with-claude/extended-thinking" },
+        ],
+      },
       // Phase 5: Agents
     ],
   },

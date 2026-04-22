@@ -2,6 +2,15 @@
 
 All notable changes to Token Explorer are documented here.
 
+## v1.4.1 — 2026-04-22
+
+Intro panels no longer eat canvas space when expanded.
+
+### Changed
+- **IntroPanel reworked across all units.** What used to be a collapsible accordion (which, when expanded, shrank the Token Space canvas enough to hide the 3D spheres) is now a slim always-visible tagline row with a `Learn more →` button. Clicking opens the full content — `whyItMatters`, `concepts`, `furtherReading` — as a centered modal with a dimmed backdrop. Canvas stays at its maximum height regardless of reading state.
+- Modal behavior: ESC key closes, backdrop click closes, background page scroll locks while open.
+- Applied to every unit (Token Space, Tokenizer, Context Window, RAG, Predict) for a consistent language across the product.
+
 ## v1.4.0 — 2026-04-22
 
 Token Space tab reworked into a desktop workbench layout to eliminate the scroll-vs-zoom conflict and keep the zoom controls always in reach.

@@ -469,7 +469,7 @@ function RAGViz() {
 
 export default function Rag({ onNavigate, onHome }) {
   return (
-    <div style={{ padding: "16px", maxWidth: "720px", margin: "0 auto" }}>
+    <div style={{ padding: "16px", maxWidth: "960px", margin: "0 auto" }}>
       <IntroPanel {...UNIT} unitId={UNIT.id} />
 
       <div style={{ fontSize: "13px", color: palette.textDim, marginBottom: "6px", lineHeight: 1.6 }}>

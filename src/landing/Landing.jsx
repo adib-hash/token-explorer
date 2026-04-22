@@ -66,7 +66,7 @@ export default function Landing({ completedUnits, lastUnitId, onOpenUnit }) {
 
   return (
     <div style={{
-      maxWidth: "720px", margin: "0 auto",
+      maxWidth: "820px", margin: "0 auto",
       padding: "24px 20px 48px",
     }}>
       <div style={{ marginBottom: "24px" }}>

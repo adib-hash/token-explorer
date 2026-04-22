@@ -86,10 +86,15 @@ export default function App() {
 
       {view !== "home" && (
         <div style={{
-          display: "flex", gap: "2px", padding: "8px 16px",
           borderBottom: `1px solid ${palette.border}`,
-          overflowX: "auto", flexShrink: 0,
+          flexShrink: 0,
+          overflowX: "auto",
+        }}>
+        <div style={{
+          display: "flex", gap: "2px", padding: "8px 16px",
           alignItems: "center",
+          maxWidth: "1040px", margin: "0 auto",
+          width: "100%", boxSizing: "border-box",
         }}>
           <button
             onClick={() => setView("home")}
@@ -129,6 +134,7 @@ export default function App() {
               </button>
             );
           })}
+        </div>
         </div>
       )}
 

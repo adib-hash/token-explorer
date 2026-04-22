@@ -468,7 +468,7 @@ export default function Predict({ onNavigate, onHome }) {
   };
 
   return (
-    <div style={{ padding: "16px", maxWidth: "720px", margin: "0 auto" }}>
+    <div style={{ padding: "16px", maxWidth: "960px", margin: "0 auto" }}>
       <IntroPanel {...UNIT} unitId={UNIT.id} />
 
       <ScenarioPicker value={scenarioId} onChange={handleScenarioChange} />

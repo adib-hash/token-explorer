@@ -2,6 +2,17 @@
 
 All notable changes to Token Explorer are documented here.
 
+## v1.3.1 — 2026-04-22
+
+### Fixed
+- **Token Space canvas wasn't rendering** after the v1.2 layout change. The canvas wrapper used `flex: 1; min-height: 60vh` inside a scrollable parent, which collapsed to 0 on some browsers. Replaced with an explicit `height: min(70vh, 640px); min-height: 420px` so the canvas always has a real size.
+
+### Changed
+- Desktop content width bumped from 720px → 960px on Tokenizer, Context Window, RAG, and Predict so units breathe on larger screens while staying comfortable on mobile.
+- Landing column widened from 720px → 820px.
+- Tab strip now centers inside a 1040px max-width wrapper and keeps horizontal scroll as a fallback on narrow viewports.
+- Token Space intro + selected-token panel centered in a 960px column; the 3D scene itself remains full-width below.
+
 ## v1.3.0 — 2026-04-22
 
 Chapter 3 begins: **Predict** — the first unit on how LLMs actually generate text.
